@@ -21,10 +21,12 @@ const Logo = ({ fontSize = "text-2xl", iconSize = 20 }: Props) => {
         <Webhook size={iconSize} className="stroke-white" />
       </div>
       <div>
-        <span className="bg-gradient-to-t from-zinc-500 to-zinc-950 bg-clip-text text-transparent">
+        <span className="bg-gradient-to-t from-zinc-500 dark:from-zinc-400 to-zinc-950 dark:to-white bg-clip-text text-transparent">
           Web
         </span>
-        <span className="text-stone-700 dark:text-stone-300">extract</span>
+        <span className="bg-gradient-to-t from-zinc-500 dark:from-zinc-400 to-zinc-950 dark:to-white bg-clip-text text-transparent">
+          extract
+        </span>
       </div>
     </Link>
   );
