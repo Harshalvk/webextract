@@ -9,6 +9,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "./ui/breadcrumb";
+import { MobileSidebar } from "./Sidebar";
 
 type Props = {};
 
@@ -18,6 +19,7 @@ const BreadcrumHeader = (props: Props) => {
 
   return (
     <div className="flex items-center flex-start">
+      <MobileSidebar />
       <Breadcrumb>
         <BreadcrumbList>
           {paths.map((path, index) => (
