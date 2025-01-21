@@ -1,11 +1,11 @@
 import { auth } from "@/auth";
 import BreadcrumHeader from "@/components/BreadcrumHeader";
 import DesktopSidebar from "@/components/Sidebar";
+import SignIn from "@/components/SignIn";
 import { ModeToggle } from "@/components/ThemeModeToggle";
 import { Separator } from "@/components/ui/separator";
 import UserAccount from "@/components/UserAccount";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -15,9 +15,7 @@ type Props = {
 const layout = async ({ children }: Props) => {
   const session = await auth();
   const user = session?.user;
-  if (!user) {
-    redirect("/signup");
-  }
+
   return (
     <div className="flex h-screen">
       <DesktopSidebar />
@@ -28,7 +26,7 @@ const layout = async ({ children }: Props) => {
             {user ? (
               <UserAccount user={user} />
             ) : (
-              <Link href={"/signup"}>Signup</Link>
+              <SignIn/>
             )}
             <ModeToggle />
           </div>
