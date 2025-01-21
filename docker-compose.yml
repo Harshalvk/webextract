@@ -1,0 +1,16 @@
+version: "1.0"
+services:
+  webextract-db:
+    image: postgres
+    restart: always
+    container_name: webextract-db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=harshal
+      - PGDATA=/data/postgres-webextract
+    volumes:
+      - postgres-webextract:/data/postgres-webextract
+
+volumes:
+  postgres-webextract:
