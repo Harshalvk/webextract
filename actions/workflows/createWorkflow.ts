@@ -19,8 +19,6 @@ export async function CreateWorkflow(form: createWorkflowSchemaType) {
   const session = await auth();
   const user = session?.user;
 
-  console.log("USER:::::::", user);
-
   if (!user) {
     throw new Error("Unauthenticated");
   }
@@ -37,8 +35,6 @@ export async function CreateWorkflow(form: createWorkflowSchemaType) {
       ...data,
     },
   });
-
-  console.log("RESULT::::::::::", result);
 
   if (!result) {
     throw new Error("Failed to create workflow");
