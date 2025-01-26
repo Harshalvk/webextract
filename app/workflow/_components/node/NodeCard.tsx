@@ -30,7 +30,7 @@ const NodeCard = ({ nodeId, children, isSelected }: Props) => {
         });
       }}
       className={cn(
-        "w-[420px] border-2 border-separate bg-background p-2 rounded-md cursor-pointer text-xs gap-1 flex flex-col",
+        "w-[420px] border-2 border-separate bg-background rounded-md cursor-pointer text-xs gap-1 flex flex-col",
         isSelected && "border-primary"
       )}
     >
