@@ -5,9 +5,10 @@ export function CreateFlowNode(
   position?: { x: number; y: number }
 ) {
   return {
-    //these are properties which are required for react-flow
+    //these are properties which are required for react-flow node config
     id: crypto.randomUUID(),
     type: "WebextractNode",
+    dragHandle: ".drag-handle",
     data: {
       type: nodeType,
       inputs: {},

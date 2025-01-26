@@ -20,12 +20,16 @@ type Props = {
 };
 
 const nodeTypes = {
-  WebextractNode: NodeComponent
-}
+  WebextractNode: NodeComponent,
+};
+
+// react-flow canvas adjustments
+const snapGrid: [number, number] = [50, 50];
+const fitViewOptions = { padding: 2 };
 
 const FlowEditor = ({ workflow }: Props) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([
-    CreateFlowNode(TaskType.LAUNCH_BROWSER)
+    CreateFlowNode(TaskType.LAUNCH_BROWSER),
   ]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
@@ -37,9 +41,13 @@ const FlowEditor = ({ workflow }: Props) => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
+        snapToGrid
+        snapGrid={snapGrid}
+        fitViewOptions={fitViewOptions}
+        fitView
       >
         <Background />
-        <Controls position="bottom-left" />
+        <Controls position="bottom-left" fitViewOptions={fitViewOptions} />
       </ReactFlow>
     </main>
   );
