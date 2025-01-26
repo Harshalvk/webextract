@@ -1,24 +1,30 @@
-"use client"
+"use client";
 
-import { Workflow } from '@prisma/client'
-import React from 'react'
-import {ReactFlowProvider} from '@xyflow/react'
-import FlowEditor from './FlowEditor'
+import { Workflow } from "@prisma/client";
+import React from "react";
+import { ReactFlowProvider } from "@xyflow/react";
+import FlowEditor from "./FlowEditor";
+import Topbar from "./topbar/Topbar";
 
 type Props = {
-  workflow: Workflow
-}
+  workflow: Workflow;
+};
 
-const Editor = ({workflow}: Props) => {
+const Editor = ({ workflow }: Props) => {
   return (
     <ReactFlowProvider>
       <div className="flex flex-col h-full w-full overflow-hidden">
-        <section className='flex h-full overflow-auto'>
-          <FlowEditor workflow={workflow}/>
+        <Topbar
+          workflowId={workflow.id}
+          title={"Workflow Editor"}
+          subtitle={workflow.name}
+        />
+        <section className="flex h-full overflow-auto">
+          <FlowEditor workflow={workflow} />
         </section>
       </div>
     </ReactFlowProvider>
-  )
-}
+  );
+};
 
-export default Editor
+export default Editor;
