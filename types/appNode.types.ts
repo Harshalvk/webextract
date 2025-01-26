@@ -1,5 +1,5 @@
 import { Node } from "@xyflow/react";
-import { TaskType } from "./task.types";
+import { TaskParam, TaskType } from "./task.types";
 
 export interface IAppNodeData {
   type: TaskType;
@@ -8,5 +8,11 @@ export interface IAppNodeData {
 }
 
 export interface IAppNode extends Node {
-  data: IAppNodeData
+  data: IAppNodeData;
 }
+
+export type ParamProps = {
+  param: TaskParam;
+  value: string;
+  udpateNodeParamValue: (newValue: string) => void;
+};
