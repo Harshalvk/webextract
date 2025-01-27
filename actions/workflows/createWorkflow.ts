@@ -2,11 +2,15 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import {
   createWorkflowSchema,
   createWorkflowSchemaType,
 } from "@/schema/workflow.schema";
+import { IAppNode } from "@/types/appNode.types";
+import { TaskType } from "@/types/task.types";
 import { WorkflowStatus } from "@/types/workflow.types";
+import { Edge } from "@xyflow/react";
 import { redirect } from "next/navigation";
 
 export async function CreateWorkflow(form: createWorkflowSchemaType) {
@@ -27,11 +31,19 @@ export async function CreateWorkflow(form: createWorkflowSchemaType) {
     throw new Error("Invalid user ID. Please log in again.");
   }
 
+  const initialFlow: { node: IAppNode[]; edges: Edge[] } = {
+    node: [],
+    edges: [],
+  };
+
+  //add the flow entry point
+  initialFlow.node.push(CreateFlowNode(TaskType.LAUNCH_BROWSER));
+
   const result = await prisma.workflow.create({
     data: {
       userId: user.id,
       status: WorkflowStatus.DRAFT,
-      definition: "TODO",
+      definition: JSON.stringify(initialFlow),
       ...data,
     },
   });
