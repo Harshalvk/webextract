@@ -13,7 +13,7 @@ export interface TaskParam {
   type: TaskParamType;
   helperText?: string;
   hideHandle?: boolean;
-  required: boolean;
+  required?: boolean; //I changed to optional
   value?: string;
   [key: string]: any;
 }
