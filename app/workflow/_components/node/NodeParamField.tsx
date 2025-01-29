@@ -3,6 +3,7 @@ import React, { useCallback } from "react";
 import StringParam from "./param/StringParam";
 import { useReactFlow } from "@xyflow/react";
 import { IAppNode } from "@/types/appNode.types";
+import BrowserInstanceParam from "./param/BrowserInstanceParam";
 
 type Props = {
   param: TaskParam;
@@ -32,6 +33,14 @@ const NodeParamField = ({ param, nodeId }: Props) => {
         <StringParam
           param={param}
           value={value}
+          udpateNodeParamValue={udpateNodeParamValue}
+        />
+      );
+    case TaskParamType.BROWSER_INSTANCE:
+      return (
+        <BrowserInstanceParam
+          param={param}
+          value={""}
           udpateNodeParamValue={udpateNodeParamValue}
         />
       );
