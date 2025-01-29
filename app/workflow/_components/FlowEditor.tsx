@@ -3,8 +3,11 @@
 import React, { useCallback, useEffect } from "react";
 import { Workflow } from "@prisma/client";
 import {
+  addEdge,
   Background,
+  Connection,
   Controls,
+  Edge,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -15,6 +18,7 @@ import NodeComponent from "./node/NodeComponent";
 import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import { TaskType } from "@/types/task.types";
 import { IAppNode } from "@/types/appNode.types";
+import DeletableEdge from "./edges/DeletableEdge";
 
 type Props = {
   workflow: Workflow;
@@ -24,13 +28,17 @@ const nodeTypes = {
   WebextractNode: NodeComponent,
 };
 
+const edgeTypes = {
+  default: DeletableEdge,
+};
+
 // react-flow canvas adjustments
 const snapGrid: [number, number] = [50, 50];
 const fitViewOptions = { padding: 2 };
 
 const FlowEditor = ({ workflow }: Props) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<IAppNode>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { setViewport, screenToFlowPosition } = useReactFlow();
 
   useEffect(() => {
@@ -65,6 +73,10 @@ const FlowEditor = ({ workflow }: Props) => {
     setNodes((nds) => nds.concat(newNode));
   }, []);
 
+  const onConnect = useCallback((connection: Connection) => {
+    setEdges((eds) => addEdge({ ...connection, animated: true }, eds));
+  }, []);
+
   return (
     <main className="h-full w-full">
       <ReactFlow
@@ -73,12 +85,14 @@ const FlowEditor = ({ workflow }: Props) => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         snapToGrid
         snapGrid={snapGrid}
         fitViewOptions={fitViewOptions}
         fitView
         onDragOver={onDragOver}
         onDrop={onDrop}
+        onConnect={onConnect}
       >
         <Background />
         <Controls position="bottom-left" fitViewOptions={fitViewOptions} />
