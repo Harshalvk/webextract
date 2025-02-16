@@ -45,7 +45,7 @@ const FlowEditor = ({ workflow }: Props) => {
     try {
       const flow = JSON.parse(workflow.definition);
       if (!flow) return;
-      setNodes(flow.nodes || []);
+      setNodes(flow.node || []);
       setEdges(flow.edges || []);
 
       if (flow.viewport) return;
@@ -71,7 +71,7 @@ const FlowEditor = ({ workflow }: Props) => {
 
     const newNode = CreateFlowNode(taskType as TaskType, position);
     setNodes((nds) => nds.concat(newNode));
-  }, []);
+  }, [screenToFlowPosition, setNodes]);
 
   const onConnect = useCallback((connection: Connection) => {
     setEdges((eds) => addEdge({ ...connection, animated: true }, eds));
