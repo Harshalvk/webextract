@@ -24,7 +24,7 @@ const NodeParamField = ({ param, nodeId }: Props) => {
         },
       });
     },
-    [updateNodeData, param.name, node?.data.inputs]
+    [updateNodeData, nodeId, node?.data.inputs, param.name]
   );
 
   switch (param.type) {
