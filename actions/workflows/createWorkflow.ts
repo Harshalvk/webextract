@@ -31,13 +31,13 @@ export async function CreateWorkflow(form: createWorkflowSchemaType) {
     throw new Error("Invalid user ID. Please log in again.");
   }
 
-  const initialFlow: { node: IAppNode[]; edges: Edge[] } = {
-    node: [],
+  const initialFlow: { nodes: IAppNode[]; edges: Edge[] } = {
+    nodes: [],
     edges: [],
   };
 
   //add the flow entry point
-  initialFlow.node.push(CreateFlowNode(TaskType.LAUNCH_BROWSER));
+  initialFlow.nodes.push(CreateFlowNode(TaskType.LAUNCH_BROWSER));
 
   const result = await prisma.workflow.create({
     data: {
