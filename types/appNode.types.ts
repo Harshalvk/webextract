@@ -15,4 +15,5 @@ export type ParamProps = {
   param: TaskParam;
   value: string;
   udpateNodeParamValue: (newValue: string) => void;
+  disabled?: boolean;
 };
