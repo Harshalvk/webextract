@@ -11,9 +11,7 @@ import { TaskType } from "@/types/task.types";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import { Button } from "@/components/ui/button";
 
-type Props = {};
-
-const TaskMenu = (props: Props) => {
+const TaskMenu = () => {
   return (
     <aside className="w-[340px] min-w-[340px] max-w-[340px] border-r border-separate h-full p-2 px-4 overflow-auto">
       <Accordion
@@ -27,6 +25,7 @@ const TaskMenu = (props: Props) => {
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-1">
             <TaskMenuBtn taskType={TaskType.PAGE_TO_HTML} />
+            <TaskMenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
           </AccordionContent>
         </AccordionItem>
       </Accordion>
