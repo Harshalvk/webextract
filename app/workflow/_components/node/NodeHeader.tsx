@@ -4,15 +4,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import { TaskType } from "@/types/task.types";
-import { Coins, GripVertical } from "lucide-react";
+import { useReactFlow } from "@xyflow/react";
+import { Coins, Copy, GripVertical, Trash } from "lucide-react";
 import React from "react";
 
 type Props = {
   taskType: TaskType;
+  nodeId: string
 };
 
-const NodeHeader = ({ taskType }: Props) => {
+const NodeHeader = ({ taskType, nodeId }: Props) => {
   const task = TaskRegistry[taskType];
+  const { deleteElements } = useReactFlow();
   return (
     <div className="flex items-center justify-between gap-2 p-2">
       <div className="flex items-center gap-2">
@@ -27,12 +30,27 @@ const NodeHeader = ({ taskType }: Props) => {
           <Coins size={16} />
           TODO
         </Badge>
+        {!task.isEntryPoint && (
+          <>
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() =>
+                deleteElements({
+                  nodes: [{ id: nodeId }],
+                })
+              }
+            >
+              <Trash size={12} />
+            </Button>
+          </>
+        )}
         <Button
           variant={"ghost"}
           size={"icon"}
           className="drag-handle cursor-grab"
         >
-          <GripVertical size={20}/>
+          <GripVertical size={20} />
         </Button>
       </div>
     </div>
