@@ -30,7 +30,7 @@ const NodeHeader = ({ taskType, nodeId }: Props) => {
         {task.isEntryPoint && <Badge className="text-xs">Entry Point</Badge>}
         <Badge className="gap-2 flex items-center text-xs">
           <Coins size={16} />
-          TODO
+          {task.credits}
         </Badge>
         {!task.isEntryPoint && (
           <>
