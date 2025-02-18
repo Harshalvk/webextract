@@ -2,7 +2,9 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
+import { IAppNode } from "@/types/appNode.types";
 import { TaskType } from "@/types/task.types";
 import { useReactFlow } from "@xyflow/react";
 import { Coins, Copy, GripVertical, Trash } from "lucide-react";
@@ -10,12 +12,12 @@ import React from "react";
 
 type Props = {
   taskType: TaskType;
-  nodeId: string
+  nodeId: string;
 };
 
 const NodeHeader = ({ taskType, nodeId }: Props) => {
   const task = TaskRegistry[taskType];
-  const { deleteElements } = useReactFlow();
+  const { deleteElements, getNode, addNodes } = useReactFlow();
   return (
     <div className="flex items-center justify-between gap-2 p-2">
       <div className="flex items-center gap-2">
@@ -42,6 +44,22 @@ const NodeHeader = ({ taskType, nodeId }: Props) => {
               }
             >
               <Trash size={12} />
+            </Button>
+            <Button
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() => {
+                const node = getNode(nodeId) as IAppNode;
+                const newX = node.position.x;
+                const newY = node.position.y + node.measured?.height! + 20;
+                const newNode = CreateFlowNode(node.data.type, {
+                  x: newX,
+                  y: newY,
+                });
+                addNodes([newNode]);
+              }}
+            >
+              <Copy size={12} />
             </Button>
           </>
         )}
