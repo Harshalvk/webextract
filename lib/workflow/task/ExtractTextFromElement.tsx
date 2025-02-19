@@ -19,6 +19,7 @@ export const ExtractTextFromElement = {
     {
       name: "Selector",
       type: TaskParamType.STRING,
+      required: true,
     },
   ],
   outputs: [
