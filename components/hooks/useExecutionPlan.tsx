@@ -1,16 +1,50 @@
-import { FlowToExecutionPlan } from "@/lib/workflow/executionPlan";
+import {
+  FlowToExecutionPlan,
+  FlowToExecutionPlanValidationError,
+} from "@/lib/workflow/executionPlan";
 import { IAppNode } from "@/types/appNode.types";
 import { useReactFlow } from "@xyflow/react";
 import { useCallback } from "react";
+import useFlowValidation from "./useFlowValidation";
+import { toast } from "sonner";
 
 const useExecutionPlan = () => {
   const { toObject } = useReactFlow();
+  const { setInvalidInputs, clearErrors } = useFlowValidation();
+
+  const handleError = useCallback(
+    (error: any) => {
+      switch (error.type) {
+        case FlowToExecutionPlanValidationError.NO_ENTRY_POINT:
+          toast.error("No entry point found");
+          break;
+        case FlowToExecutionPlanValidationError.INVALID_INPUTS:
+          toast.error("No all inputs values are set");
+          setInvalidInputs(error.invalidElements);
+          break;
+        default:
+          toast.error("Something went wrong");
+          break;
+      }
+    },
+    [setInvalidInputs]
+  );
 
   const generateExecutionPlan = useCallback(() => {
     const { nodes, edges } = toObject();
-    const { executionPlan } = FlowToExecutionPlan(nodes as IAppNode[], edges);
+    const { executionPlan, error } = FlowToExecutionPlan(
+      nodes as IAppNode[],
+      edges
+    );
+
+    if (error) {
+      handleError(error);
+      return null;
+    }
+
+    clearErrors();
     return executionPlan;
-  }, [toObject]);
+  }, [toObject, handleError, clearErrors]);
   return generateExecutionPlan;
 };
 
