@@ -3,7 +3,13 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { FlowToExecutionPlan } from "@/lib/workflow/executionPlan";
-import { WorkflowExecutionPlan } from "@/types/workflow.types";
+import { TaskRegistry } from "@/lib/workflow/task/registry";
+import {
+  ExecutionPhaseStatus,
+  WorkflowExecutionPlan,
+  WorkflowExecutionStatus,
+  WorkflowExecutionTrigger,
+} from "@/types/workflow.types";
 
 export async function RunWorkflow(form: {
   workflowId: string;
@@ -16,7 +22,7 @@ export async function RunWorkflow(form: {
     throw new Error("Unauthenticated");
   }
 
-  if (!user?.id) {
+  if (!user.id) {
     throw new Error("Invalid user ID. Please log in again.");
   }
 
@@ -52,5 +58,35 @@ export async function RunWorkflow(form: {
   }
 
   executionPlan = result.executionPlan;
-  console.log("======Execution plan======\n", executionPlan);
+
+  const execution = await prisma.workflowExecution.create({
+    data: {
+      workflowId,
+      userId: user.id,
+      status: WorkflowExecutionStatus.PENDING,
+      startedAt: new Date(),
+      trigger: WorkflowExecutionTrigger.MANUAL,
+      phases: {
+        create: executionPlan.flatMap((phase) => {
+          return phase.nodes.flatMap((node) => {
+            return {
+              userId: user.id!,
+              status: ExecutionPhaseStatus.CREATED,
+              number: phase.phase,
+              node: JSON.stringify(node),
+              name: TaskRegistry[node.data.type].label,
+            };
+          });
+        }),
+      },
+    },
+    select: {
+      id: true,
+      phases: true,
+    },
+  });
+
+  if (!execution) {
+    throw new Error("workflow execution not created");
+  }
 }
