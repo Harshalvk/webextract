@@ -8,14 +8,18 @@ import {
   CircleDashedIcon,
   Clock,
   Coins,
+  Loader2,
   LucideIcon,
   Workflow,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { DatesToDurationString } from "@/lib/helper/dates";
+import { GetPhasesTotalCost } from "@/lib/helper/phases";
+import { GetWorkflowPhaseDetails } from "@/actions/workflows/getWorkflowPhaseDetails";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -24,6 +28,8 @@ type Props = {
 };
 
 const ExecutionViewer = ({ initialData }: Props) => {
+  const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
+
   const query = useQuery({
     queryKey: ["execution", initialData],
     initialData,
@@ -31,6 +37,22 @@ const ExecutionViewer = ({ initialData }: Props) => {
     refetchInterval: (q) =>
       q.state.data?.status === WorkflowExecutionStatus.RUNNING ? 1000 : false, //if the execution is running then we fetch the data otherwise it is false
   });
+
+  const phaseDetails = useQuery({
+    queryKey: ["phaseDetails", selectedPhase],
+    enabled: selectedPhase !== null,
+    queryFn: () => GetWorkflowPhaseDetails(selectedPhase!)
+  });
+
+  const isRunning = query.data?.status === WorkflowExecutionStatus.RUNNING;
+
+  const duration = DatesToDurationString(
+    query.data?.completedAt,
+    query.data?.startedAt
+  );
+
+  const creditsConsumed = GetPhasesTotalCost(query.data?.phases || []);
+
   return (
     <div className="flex w-full h-full">
       <aside className="w-[440px] min-w-[440px] max-w-[440px] border-r-2 border-separate flex flex-grow flex-col overflow-hidden">
@@ -53,11 +75,24 @@ const ExecutionViewer = ({ initialData }: Props) => {
               </span>
             }
           />
-          <ExecutionLabel icon={Clock} label="Duration" value={"TODO"} />
+          <ExecutionLabel
+            icon={Clock}
+            label="Duration"
+            value={
+              duration ? (
+                duration
+              ) : (
+                <Loader2
+                  className="animate-spin flex items-center justify-center"
+                  size={20}
+                />
+              )
+            }
+          />
           <ExecutionLabel
             icon={Coins}
             label="Credits consumed"
-            value={"TODO"}
+            value={creditsConsumed}
           />
         </div>
         <Separator />
@@ -73,7 +108,11 @@ const ExecutionViewer = ({ initialData }: Props) => {
             <Button
               key={phase.id}
               className="w-full justify-between"
-              variant={"ghost"}
+              variant={selectedPhase === phase.id ? "secondary" : "ghost"}
+              onClick={() => {
+                if (isRunning) return;
+                setSelectedPhase(phase.id);
+              }}
             >
               <div className="flex items-center gap-2">
                 <Badge
@@ -84,10 +123,16 @@ const ExecutionViewer = ({ initialData }: Props) => {
                 </Badge>
                 <p className="font-semibold">{phase.name}</p>
               </div>
+              <p className="text-sx text-muted-foreground">{phase.status}</p>
             </Button>
           ))}
         </div>
       </aside>
+      <div className="flex w-full h-full">
+        <pre>
+          {JSON.stringify(phaseDetails.data, null, 4)}
+        </pre>
+      </div>
     </div>
   );
 };
