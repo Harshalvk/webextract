@@ -12,13 +12,13 @@ export default async function ExecutionViewerPage({
     workflowId: string;
   };
 }) {
-  await params;
+  const {executionId, workflowId} = await params;
   return (
     <div className="flex flex-col h-screen w-full overflow-hidden">
       <Topbar
-        workflowId={params.workflowId}
+        workflowId={workflowId}
         title="Workflow run details"
-        subtitle={`Run ID: ${params.executionId}`}
+        subtitle={`Run ID: ${executionId}`}
         hideButtons
       />
       <section className="flex h-full overflow-auto">
@@ -29,7 +29,7 @@ export default async function ExecutionViewerPage({
             </div>
           }
         >
-          <ExecutionviewerWrapper executionId={params.executionId} />
+          <ExecutionviewerWrapper executionId={executionId} />
         </Suspense>
       </section>
     </div>
