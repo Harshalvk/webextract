@@ -8,6 +8,7 @@ import { useReactFlow } from "@xyflow/react";
 import { Play } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type Props = {
   workflowId: string;
@@ -16,11 +17,18 @@ type Props = {
 const ExecuteBtn = ({ workflowId }: Props) => {
   const generate = useExecutionPlan();
   const { toObject } = useReactFlow();
+  const router = useRouter()
 
   const mutation = useMutation({
     mutationFn: RunWorkflow,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data.error) {
+        toast.error(`Execution failed: ${data.error}`, {
+          id: "flow-execution",
+        });
+      }
       toast.success("Execution started", { id: "flow-execution" });
+      router.push(`/workflow/runs/${workflowId}/${data.executionId}`);
     },
     onError: () => {
       toast.error("Something went wrong", { id: "flow-execution" });
