@@ -78,14 +78,20 @@ model Authenticator {
 }
 
 model Workflow {
-  id          String   @id @default(cuid())
+  id          String  @id @default(cuid())
   userId      String
   name        String
   description String?
-  definition  String
-  status      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  definition String
+  status     String // DRAFT | PUBLISHED
+
+  lastRunAt     DateTime?
+  lastRunId     String?
+  lastRunStatus String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   executions WorkflowExecution[]
 
@@ -103,6 +109,8 @@ model WorkflowExecution {
   startedAt   DateTime?
   completedAt DateTime?
 
+  creditsConsumed Int @default(0)
+
   phases   ExecutionPhase[]
   workflow Workflow         @relation(fields: [workflowId], references: [id], onDelete: Cascade)
 }
@@ -114,12 +122,12 @@ model ExecutionPhase {
   number      Int
   node        String
   name        String
-  started     DateTime?
+  startedAt     DateTime?
   completedAt DateTime?
   inputs      String?
   output      String?
 
-  creditsConsumed  Int?
+  creditsConsumed Int?
 
   workflowExecutionId String
   execution           WorkflowExecution @relation(fields: [workflowExecutionId], references: [id], onDelete: Cascade)
