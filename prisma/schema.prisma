@@ -108,6 +108,7 @@ model WorkflowExecution {
   createdAt   DateTime  @default(now())
   startedAt   DateTime?
   completedAt DateTime?
+  definition  String    @default("{}")
 
   creditsConsumed Int @default(0)
 
@@ -122,10 +123,10 @@ model ExecutionPhase {
   number      Int
   node        String
   name        String
-  startedAt     DateTime?
+  startedAt   DateTime?
   completedAt DateTime?
   inputs      String?
-  output      String?
+  outputs     String?
 
   creditsConsumed Int?
 
