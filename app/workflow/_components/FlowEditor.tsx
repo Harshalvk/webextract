@@ -21,6 +21,7 @@ import { TaskType } from "@/types/task.types";
 import { IAppNode } from "@/types/appNode.types";
 import DeletableEdge from "./edges/DeletableEdge";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
+import { useTheme } from "next-themes";
 
 type Props = {
   workflow: Workflow;
@@ -42,6 +43,7 @@ const FlowEditor = ({ workflow }: Props) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<IAppNode>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { setViewport, screenToFlowPosition, updateNodeData } = useReactFlow();
+  const { theme } = useTheme();
 
   useEffect(() => {
     try {
@@ -158,6 +160,7 @@ const FlowEditor = ({ workflow }: Props) => {
         onDrop={onDrop}
         onConnect={onConnect}
         isValidConnection={isValidConnection}
+        colorMode={theme}
       >
         <Background />
         <Controls position="bottom-left" fitViewOptions={fitViewOptions} />
