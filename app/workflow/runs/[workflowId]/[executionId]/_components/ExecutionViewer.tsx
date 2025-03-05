@@ -32,7 +32,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDistanceToNow } from "date-fns";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -69,6 +69,24 @@ const ExecutionViewer = ({ initialData }: Props) => {
   });
 
   const isRunning = query.data?.status === WorkflowExecutionStatus.RUNNING;
+
+  useEffect(() => {
+    //while running we auto-select the current running phase in the sidebar
+    const phases = query.data?.phases || [];
+    if (isRunning) {
+      //select the last executed phase
+      const phaseToSelect = phases.toSorted((a, b) =>
+        a.startedAt! > b.startedAt! ? -1 : 1
+      )[0];
+      setSelectedPhase(phaseToSelect.id);
+      return;
+    }
+    //TODO: set the last selected phase by the user
+    const phaseToSelect = phases.toSorted((a, b) =>
+      a.completedAt! > b.completedAt! ? -1 : 1
+    )[0];
+    setSelectedPhase(phaseToSelect.id);
+  }, [query.data?.phases, isRunning, setSelectedPhase]);
 
   const duration = DatesToDurationString(
     query.data?.completedAt,
@@ -263,7 +281,11 @@ function ParameterViewer({
                 <p className="text-sm text-muted-foreground flex-1 basis-1/3">
                   {key}
                 </p>
-                <Input readOnly className="flex-1 basis-2/3" value={String(value)} />
+                <Input
+                  readOnly
+                  className="flex-1 basis-2/3"
+                  value={String(value)}
+                />
               </div>
             ))}
         </div>
