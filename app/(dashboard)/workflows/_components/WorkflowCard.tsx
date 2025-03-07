@@ -24,6 +24,7 @@ import {
 import Link from "next/link";
 import React, { useState } from "react";
 import DeleteWorkflowDialog from "./DeleteWorkflowDialog";
+import RunBtn from "./RunBtn";
 
 type Props = {
   workflow: Workflow;
@@ -70,6 +71,7 @@ const WorkflowCard = ({ workflow }: Props) => {
           </div>
         </div>
         <div className="flex items-center space-x-2">
+          {!isDraft && <RunBtn workflowId={workflow.id} />}
           <Link
             href={`/workflow/editor/${workflow.id}`}
             className={cn(
