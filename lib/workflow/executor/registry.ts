@@ -5,6 +5,7 @@ import { WorkflowTask } from "@/types/workflow.types";
 import { ExecutionEnvironment } from "@/types/executor.types";
 import { ExtractFromElementExecutor } from "./ExtractFromElementExecutor";
 import { FillInputExecutor } from "./FillInputExecutor";
+import { ClickElementExecutor } from "./ClickElementExecutor";
 
 type ExecutorFn<T extends WorkflowTask> = (
   environment: ExecutionEnvironment<T>
@@ -19,4 +20,5 @@ export const ExecutorRegistry: RegistryType = {
   PAGE_TO_HTML: PageToHtmlExecutor,
   EXTRACT_TEXT_FROM_ELEMENT: ExtractFromElementExecutor,
   FILL_INPUT: FillInputExecutor,
+  CLICK_ELEMENT: ClickElementExecutor,
 };
