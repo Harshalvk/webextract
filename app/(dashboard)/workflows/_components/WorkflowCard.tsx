@@ -12,10 +12,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { WorkflowStatus } from "@/types/workflow.types";
+import {
+  WorkflowExecutionStatus,
+  WorkflowStatus,
+} from "@/types/workflow.types";
 import { Workflow } from "@prisma/client";
 import {
   ArrowRight,
+  ChevronRight,
+  Clock,
   Coins,
   CornerDownRight,
   FileTextIcon,
@@ -30,6 +35,9 @@ import DeleteWorkflowDialog from "./DeleteWorkflowDialog";
 import RunBtn from "./RunBtn";
 import SchedulerDialog from "./SchedulerDialog";
 import { Badge } from "@/components/ui/badge";
+import ExecutionStatusIndicator, { ExecutionStatusLabel } from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
+import { format, formatDistanceToNow } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 
 type Props = {
   workflow: Workflow;
@@ -54,9 +62,9 @@ const WorkflowCard = ({ workflow }: Props) => {
             )}
           >
             {isDraft ? (
-              <FileTextIcon className="h-5 w-5 text-black" />
+              <FileTextIcon className="h-5 w-5 text-white" />
             ) : (
-              <PlayIcon className="h-5 w-5 text-black" />
+              <PlayIcon className="h-5 w-5 text-white" />
             )}
           </div>
           <div className="">
@@ -96,7 +104,7 @@ const WorkflowCard = ({ workflow }: Props) => {
             Edit
             <ArrowRight
               size={16}
-              className="group-hover:translate-x-1 transition"
+              className="-translate-x-[2px] group-hover:translate-x-0 transition"
             />
           </Link>
           <WorkflowActions
@@ -105,6 +113,7 @@ const WorkflowCard = ({ workflow }: Props) => {
           />
         </div>
       </CardContent>
+      <LastRunDetails workflow={workflow} />
     </Card>
   );
 };
@@ -141,12 +150,15 @@ function WorkflowActions({
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="text-destructive flex items-center gap-2"
+            className="text-destructive flex items-center gap-2 group"
             onSelect={() => {
               setShowDeleteDialog((prev) => !prev);
             }}
           >
-            <TrashIcon size={16} />
+            <TrashIcon
+              size={16}
+              className="group-hover:animate-shake transition text-destructive group-hover:text-primary"
+            />
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -170,7 +182,11 @@ function ScheduleSection({
   return (
     <div className="flex items-center gap-2">
       <CornerDownRight className="h-4 w-4 text-muted-foreground" />
-      <SchedulerDialog workflowId={workflowId} cron={cron} key={`${cron}-${workflowId}`}/>
+      <SchedulerDialog
+        workflowId={workflowId}
+        cron={cron}
+        key={`${cron}-${workflowId}`}
+      />
       <MoveRight className="h-4 w-4 text-muted-foreground" />
       <TooltipWrapper content="Credit consumption for full run">
         <div className="flex items-center gap-3">
@@ -183,6 +199,52 @@ function ScheduleSection({
           </Badge>
         </div>
       </TooltipWrapper>
+    </div>
+  );
+}
+
+function LastRunDetails({ workflow }: { workflow: Workflow }) {
+  const isDraft = workflow.status === WorkflowStatus.DRAFT;
+  if (isDraft) return null;
+  const { lastRunAt, lastRunStatus, lastRunId, nextRunAt } = workflow;
+  const formattedStartedAt =
+    lastRunAt && formatDistanceToNow(lastRunAt, { addSuffix: true });
+  const nextSchedule = nextRunAt && format(nextRunAt, "yyyy-MM-dd HH:mm");
+  const nextScheduleUTC =
+    nextRunAt && formatInTimeZone(nextRunAt, "utc", "HH:mm");
+
+  return (
+    <div className="bg-primary/5 px-4 py-1 flex justify-between items-center text-muted-foreground">
+      <div className="flex items-center text-sm gap-2">
+        {lastRunAt && (
+          <Link
+            href={`/workflow/runs/${workflow.id}/${lastRunId}`}
+            className="flex items-center text-sm gap-2 group"
+          >
+            <span>Last run:</span>
+            <ExecutionStatusIndicator
+              status={lastRunStatus as WorkflowExecutionStatus}
+            />
+            <ExecutionStatusLabel
+              status={lastRunStatus as WorkflowExecutionStatus}
+            />
+            <span>{formattedStartedAt}</span>
+            <ChevronRight
+              size={14}
+              className="-translate-x-[2px] group-hover:translate-x-0 transition"
+            />
+          </Link>
+        )}
+        {!lastRunAt && <p>No runs yet</p>}
+      </div>
+      {nextRunAt && (
+        <div className="flex items-center text-sm gap-2">
+          <Clock size={14} />
+          <span>Next run at:</span>
+          <span>{nextSchedule}</span>
+          <span className="text-xs">({nextScheduleUTC} UTC)</span>
+        </div>
+      )}
     </div>
   );
 }
