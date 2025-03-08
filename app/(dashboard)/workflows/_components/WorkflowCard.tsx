@@ -35,9 +35,12 @@ import DeleteWorkflowDialog from "./DeleteWorkflowDialog";
 import RunBtn from "./RunBtn";
 import SchedulerDialog from "./SchedulerDialog";
 import { Badge } from "@/components/ui/badge";
-import ExecutionStatusIndicator, { ExecutionStatusLabel } from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
+import ExecutionStatusIndicator, {
+  ExecutionStatusLabel,
+} from "@/app/workflow/runs/[workflowId]/_components/ExecutionStatusIndicator";
 import { format, formatDistanceToNow } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
+import DuplicateWorkflowDialog from "./DuplicateWorkflowDialog";
 
 type Props = {
   workflow: Workflow;
@@ -52,7 +55,7 @@ const WorkflowCard = ({ workflow }: Props) => {
   const isDraft = workflow.status === WorkflowStatus.DRAFT;
 
   return (
-    <Card className="border border-separate rounded-lg overflow-hidden hover:shadow-sm">
+    <Card className="border border-separate rounded-lg overflow-hidden hover:shadow-sm group/card">
       <CardContent className="p-4 flex items-center justify-between h-[100px]">
         <div className="flex items-center justify-end space-x-3">
           <div
@@ -69,17 +72,22 @@ const WorkflowCard = ({ workflow }: Props) => {
           </div>
           <div className="">
             <h3 className="text-base font-bold text-muted-foreground flex items-center">
-              <Link
-                href={`/workflow/editor/${workflow.id}`}
-                className="flex items-center hover:underline"
+              <TooltipWrapper
+                content={workflow.description}
               >
-                {workflow.name}
-              </Link>
+                <Link
+                  href={`/workflow/editor/${workflow.id}`}
+                  className="flex items-center hover:underline"
+                >
+                  {workflow.name}
+                </Link>
+              </TooltipWrapper>
               {isDraft && (
                 <span className="ml-2 text-xs border rounded-full px-2 py-0.5 bg-yellow-300 text-yellow-800">
                   Draft
                 </span>
               )}
+              <DuplicateWorkflowDialog workflowId={workflow.id} />
             </h3>
             <ScheduleSection
               isDraft={isDraft}
