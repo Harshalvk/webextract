@@ -59,7 +59,7 @@ export async function GET(req: Request) {
   }
 
   try {
-    const cron = parser.parse(workflow.cron!, { tz: "utc" });
+    const cron = parser.parse(workflow.cron!);
     const nextRun = cron.next().toDate();
     const execution = await prisma.workflowExecution.create({
       data: {
