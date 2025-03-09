@@ -5,6 +5,7 @@ import { useReactFlow } from "@xyflow/react";
 import { IAppNode } from "@/types/appNode.types";
 import BrowserInstanceParam from "./param/BrowserInstanceParam";
 import SelectParam from "./param/SelectParam";
+import CredentialsParam from "./param/CredentialsParam";
 
 type Props = {
   param: TaskParam;
@@ -50,6 +51,15 @@ const NodeParamField = ({ param, nodeId, disabled }: Props) => {
     case TaskParamType.SELECT:
       return (
         <SelectParam
+          param={param}
+          value={value}
+          udpateNodeParamValue={udpateNodeParamValue}
+          disabled={disabled}
+        />
+      );
+    case TaskParamType.CREDENTIAL:
+      return (
+        <CredentialsParam
           param={param}
           value={value}
           udpateNodeParamValue={udpateNodeParamValue}
