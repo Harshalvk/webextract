@@ -31,7 +31,7 @@ const StringParam = ({
       <Component
         id={id}
         disabled={disabled}
-        className="text-xs"
+        className="text-xs resize-none"
         value={internalValue}
         placeholder="Enter value here"
         onChange={(e: any) => setInternalValue(e.target.value)}
