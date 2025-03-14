@@ -59,6 +59,9 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    .react-flow__controls-button {
+      @apply !bg-accent;
+    }
   }
 }
 
@@ -69,4 +72,8 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.react-flow__attribution {
+  background: transparent !important;
 }
