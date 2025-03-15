@@ -3,14 +3,8 @@ import authConfig from "./auth.config";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const protectedRoutes = [
-  "/",
-  "/credentials",
-  "/workflows",
-  "/workflow",
-  "/setup",
-];
-const authRoutes = ["/auth/login"];
+const protectedRoutes = ["/", "/credentials", "/workflows", "/workflow"];
+const authRoutes = ["/auth/login", "/api/webhooks/stripe"];
 
 export const { auth } = NextAuth(authConfig);
 
