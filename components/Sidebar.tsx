@@ -19,7 +19,7 @@ type Props = {};
 
 const routes = [
   {
-    href: "/",
+    href: "",
     label: "Home",
     icon: HomeIcon,
   },
@@ -60,7 +60,7 @@ const DesktopSidebar = (props: Props) => {
         {routes.map((route) => (
           <Link
             key={route.href}
-            href={route.href}
+            href={`/${route.href}`}
             className={buttonVariants({
               variant:
                 activeRoute.href === route.href
@@ -105,7 +105,7 @@ export function MobileSidebar() {
               {routes.map((route) => (
                 <Link
                   key={route.href}
-                  href={route.href}
+                  href={`/${route.href}`} 
                   className={buttonVariants({
                     variant:
                       activeRoute.href === route.href
