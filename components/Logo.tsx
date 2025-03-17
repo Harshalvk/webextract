@@ -11,7 +11,7 @@ type Props = {
 const Logo = ({ fontSize = "text-2xl", iconSize = 20 }: Props) => {
   return (
     <Link
-      href={"/"}
+      href={"/dashboard"}
       className={cn(
         "text-2xl font-extrabold flex items-center gap-2",
         fontSize
