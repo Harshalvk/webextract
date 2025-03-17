@@ -1,16 +1,16 @@
 import { GetPeriods } from "@/actions/analytics/getPeriods";
 import React, { Suspense } from "react";
-import PeriodSelector from "./_components/PeriodSelector";
+import PeriodSelector from "../_components/PeriodSelector";
 import { Period } from "@/types/analytics.types";
 import { waitFor } from "@/lib/helper/waitFor";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GetStatsCardsValues } from "@/actions/analytics/getStatsCardsValues";
 import { CirclePlay, Coins, Waypoints } from "lucide-react";
-import StatsCard from "./_components/StatsCard";
+import StatsCard from "../_components/StatsCard";
 import { GetWorkFlowExecutionStats } from "@/actions/analytics/getWorkFlowExecutionStats";
-import ExecutionStatusChart from "./_components/ExecutionStatusChart";
+import ExecutionStatusChart from "../_components/ExecutionStatusChart";
 import { GetCreditsUsageInPeriod } from "@/actions/analytics/getCreditsUsageInPeriod";
-import CreditsUsageChart from "./billing/_components/CreditsUsageChart";
+import CreditsUsageChart from "../billing/_components/CreditsUsageChart";
 
 type Props = {
   searchParams: {
