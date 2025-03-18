@@ -84,7 +84,7 @@ export default function Navbar() {
                 {session?.user ? (
                   <Button
                     variant={"secondary"}
-                    className="rounded-full"
+                    className="rounded-full hidden md:block"
                     onClick={() => router.push("/dashboard")}
                   >
                     Dashborad
@@ -92,7 +92,7 @@ export default function Navbar() {
                 ) : (
                   <Button
                     variant="secondary"
-                    className="rounded-full"
+                    className="rounded-full hidden md:block"
                     onClick={() =>
                       signIn("github", { redirectTo: "/dashboard" })
                     }

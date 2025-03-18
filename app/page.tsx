@@ -8,7 +8,7 @@ export default function LandingPage() {
   return (
     <>
       <Navbar />
-      <Spotlight />
+      <Spotlight className="z-0" />
       <Hero />
     </>
   );
