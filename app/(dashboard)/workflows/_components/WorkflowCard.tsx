@@ -72,9 +72,7 @@ const WorkflowCard = ({ workflow }: Props) => {
           </div>
           <div className="">
             <h3 className="text-base font-bold text-muted-foreground flex items-center">
-              <TooltipWrapper
-                content={workflow.description}
-              >
+              <TooltipWrapper content={workflow.description}>
                 <Link
                   href={`/workflow/editor/${workflow.id}`}
                   className="flex items-center hover:underline"
@@ -97,27 +95,30 @@ const WorkflowCard = ({ workflow }: Props) => {
             />
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          {!isDraft && <RunBtn workflowId={workflow.id} />}
-          <Link
-            href={`/workflow/editor/${workflow.id}`}
-            className={cn(
-              buttonVariants({
-                variant: "outline",
-                size: "sm",
-              }),
-              "flex items-center gap-2 group"
-            )}
-          >
-            Edit
-            <ArrowRight
-              size={16}
-              className="-translate-x-[2px] group-hover:translate-x-0 transition"
-            />
-          </Link>
+        <div className="flex gap-2">
+          <div className="hidden lg:flex items-center space-x-2">
+            {!isDraft && <RunBtn workflowId={workflow.id} />}
+            <Link
+              href={`/workflow/editor/${workflow.id}`}
+              className={cn(
+                buttonVariants({
+                  variant: "outline",
+                  size: "sm",
+                }),
+                "flex items-center gap-2 group"
+              )}
+            >
+              Edit
+              <ArrowRight
+                size={16}
+                className="-translate-x-[2px] group-hover:translate-x-0 transition"
+              />
+            </Link>
+          </div>
           <WorkflowActions
             workflowName={workflow.name}
             workflowId={workflow.id}
+            workflowIsDraft={isDraft}
           />
         </div>
       </CardContent>
@@ -129,9 +130,11 @@ const WorkflowCard = ({ workflow }: Props) => {
 function WorkflowActions({
   workflowName,
   workflowId,
+  workflowIsDraft,
 }: {
   workflowName: string;
   workflowId: string;
+  workflowIsDraft: boolean;
 }) {
   const [showDeletDialog, setShowDeleteDialog] = useState(false);
 
@@ -169,6 +172,29 @@ function WorkflowActions({
             />
             Delete
           </DropdownMenuItem>
+          {!workflowIsDraft && (
+            <DropdownMenuItem className="block lg:hidden">
+              <RunBtn workflowId={workflowId} />
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuItem className="lg:hidden">
+            <Link
+              href={`/workflow/editor/${workflowId}`}
+              className={cn(
+                buttonVariants({
+                  variant: "outline",
+                  size: "sm",
+                }),
+                "flex items-center gap-2 group"
+              )}
+            >
+              Edit
+              <ArrowRight
+                size={16}
+                className="-translate-x-[2px] group-hover:translate-x-0 transition"
+              />
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
@@ -188,14 +214,14 @@ function ScheduleSection({
 }) {
   if (isDraft) return null;
   return (
-    <div className="flex items-center gap-2">
-      <CornerDownRight className="h-4 w-4 text-muted-foreground" />
+    <div className="flex flex-wrap items-center gap-2">
+      <CornerDownRight size={16} className="text-muted-foreground" />
       <SchedulerDialog
         workflowId={workflowId}
         cron={cron}
         key={`${cron}-${workflowId}`}
       />
-      <MoveRight className="h-4 w-4 text-muted-foreground" />
+      <MoveRight size={16} className="text-muted-foreground" />
       <TooltipWrapper content="Credit consumption for full run">
         <div className="flex items-center gap-3">
           <Badge
@@ -222,7 +248,7 @@ function LastRunDetails({ workflow }: { workflow: Workflow }) {
     nextRunAt && formatInTimeZone(nextRunAt, "utc", "HH:mm");
 
   return (
-    <div className="bg-primary/5 px-4 py-1 flex justify-between items-center text-muted-foreground">
+    <div className="bg-primary/5 px-4 py-1 flex flex-col lg:flex-row justify-between items-start lg:items-center text-muted-foreground">
       <div className="flex items-center text-sm gap-2">
         {lastRunAt && (
           <Link
@@ -246,7 +272,7 @@ function LastRunDetails({ workflow }: { workflow: Workflow }) {
         {!lastRunAt && <p>No runs yet</p>}
       </div>
       {nextRunAt && (
-        <div className="flex items-center text-sm gap-2">
+        <div className="flex flex-wrap items-center text-sm gap-2">
           <Clock size={14} />
           <span>Next run at:</span>
           <span>{nextSchedule}</span>
