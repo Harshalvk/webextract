@@ -34,7 +34,10 @@ const Features = () => {
       </TextEffect>
       <div className="w-full grid gap-2 md:grid-cols-3 my-6">
         {content.map((c) => (
-          <div className="flex flex-col items-center text-center border mx-2 p-4 rounded-lg shadow-sm hover:shadow-md transition">
+          <div
+            key={c.title}
+            className="flex flex-col items-center text-center border mx-2 p-4 rounded-lg shadow-sm hover:shadow-md transition"
+          >
             <c.icon className="w-10 h-10 text-primary mb-2" />
             <h2 className="text-lg font-semibold">{c.title}</h2>
             <p className="text-sm text-muted-foreground">{c.description}</p>

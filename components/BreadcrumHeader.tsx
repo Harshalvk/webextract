@@ -11,9 +11,7 @@ import {
 } from "./ui/breadcrumb";
 import { MobileSidebar } from "./Sidebar";
 
-type Props = {};
-
-const BreadcrumHeader = (props: Props) => {
+const BreadcrumHeader = () => {
   const pathName = usePathname();
   const paths = pathName === "/" ? [""] : pathName?.split("/");
 

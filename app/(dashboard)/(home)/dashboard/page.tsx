@@ -2,7 +2,6 @@ import { GetPeriods } from "@/actions/analytics/getPeriods";
 import React, { Suspense } from "react";
 import PeriodSelector from "../_components/PeriodSelector";
 import { Period } from "@/types/analytics.types";
-import { waitFor } from "@/lib/helper/waitFor";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GetStatsCardsValues } from "@/actions/analytics/getStatsCardsValues";
 import { CirclePlay, Coins, Waypoints } from "lucide-react";
@@ -13,15 +12,15 @@ import { GetCreditsUsageInPeriod } from "@/actions/analytics/getCreditsUsageInPe
 import CreditsUsageChart from "../billing/_components/CreditsUsageChart";
 
 type Props = {
-  searchParams: {
+  searchParams: Promise<{
     month?: string;
     year?: string;
-  };
+  }>;
 };
 
 const HomePage = async ({ searchParams }: Props) => {
   const currentDate = new Date();
-  const { month, year } = await searchParams;
+  const { month, year } = (await searchParams) ?? {};
   const period: Period = {
     month: month ? parseInt(month) : currentDate.getMonth(),
     year: year ? parseInt(year) : currentDate.getFullYear(),

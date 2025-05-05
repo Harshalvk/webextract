@@ -5,9 +5,9 @@ import React from "react";
 import Editor from "../../_components/Editor";
 
 type Props = {
-  params: {
+  params: Promise<{
     workflowId: string;
-  };
+  }>;
 };
 
 const page = async ({ params }: Props) => {

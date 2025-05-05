@@ -6,18 +6,18 @@ import { waitFor } from "@/lib/helper/waitFor";
 import ExecutionsTable from "./_components/ExecutionsTable";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     workflowId: string;
-  };
+  }>;
 };
 
 export default async function ExecutionPage({ params }: PageProps) {
-  await params;
+  const { workflowId } = await params;
 
   return (
     <div className="h-full w-full overflow-auto">
       <Topbar
-        workflowId={params.workflowId}
+        workflowId={workflowId}
         hideButtons
         title="All runs"
         subtitle="List of all your workflow runs"
@@ -32,7 +32,7 @@ export default async function ExecutionPage({ params }: PageProps) {
           </div>
         }
       >
-        <ExecutionsTableWrapper workflowId={params.workflowId} />
+        <ExecutionsTableWrapper workflowId={workflowId} />
       </Suspense>
     </div>
   );

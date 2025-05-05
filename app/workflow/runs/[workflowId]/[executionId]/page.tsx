@@ -7,12 +7,12 @@ import ExecutionViewer from "./_components/ExecutionViewer";
 export default async function ExecutionViewerPage({
   params,
 }: {
-  params: {
+  params: Promise<{
     executionId: string;
     workflowId: string;
-  };
+  }>;
 }) {
-  const {executionId, workflowId} = await params;
+  const { executionId, workflowId } = await params;
   return (
     <div className="flex flex-col h-screen w-full overflow-hidden">
       <Topbar

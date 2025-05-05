@@ -1,14 +1,11 @@
 import { GetWorkflowsForUser } from "@/actions/workflows/getWorkflowsForUser";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { waitFor } from "@/lib/helper/waitFor";
 import { AlertCircle, Inbox } from "lucide-react";
 import React from "react";
 import CreateWorkflowDialog from "./CreateWorkflowDialog";
 import WorkflowCard from "./WorkflowCard";
 
-type Props = {};
-
-const UserWorkflows = async (props: Props) => {
+const UserWorkflows = async () => {
   const workflows = await GetWorkflowsForUser();
 
   if (!workflows) {
