@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,13 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "next-auth/react";
 
-export default function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+export default function LoginForm() {
   return (
     <div className="flex min-h-svh min-w-96 flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10 dark:bg-zinc-950">
-      <div className={cn("flex flex-col gap-6", className)} {...props}>
+      <div className="flex flex-col gap-6">
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-xl">Welcome back</CardTitle>
