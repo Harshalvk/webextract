@@ -15,8 +15,5 @@ export default {
       session.user.id = token.id as string;
       return session;
     },
-    async redirect({ url, baseUrl }) {
-      return `${baseUrl}/setup`;
-    },
   },
 } satisfies NextAuthConfig;
