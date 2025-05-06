@@ -41,7 +41,7 @@ const UserAccount = ({ user }: Props) => {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
-            signOut();
+            signOut({ redirectTo: "/" });
           }}
           className="text-red-800 cursor-pointer dark:text-red-500 group"
         >

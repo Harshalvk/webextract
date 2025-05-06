@@ -93,9 +93,9 @@ export default function Navbar() {
                   <Button
                     variant="secondary"
                     className="rounded-full hidden md:block"
-                    onClick={() =>
-                      signIn("github", { redirectTo: "/dashboard" })
-                    }
+                    onClick={() => {
+                      router.push("/auth/login");
+                    }}
                   >
                     Log In
                   </Button>
